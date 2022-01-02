@@ -11,6 +11,7 @@ Created on Mon Dec 20 13:07:55 2021
 import numpy as np
 import scipy.io.matlab as matlab
 import matplotlib.pyplot as plt
+from pylab import *
 
 def aviris_data_load():
         
@@ -42,3 +43,15 @@ def aviris_data_load():
     return([X,Y,Xl,Yl])
 
     
+def class_map(image):
+    n_clusters = np.max(image.reshape([145*145,1]))+1
+    
+    cmap = cm.get_cmap('tab20c', n_clusters) 
+    
+    fig, ax = plt.subplots()
+    plt.imshow(image,cmap = cmap)
+    plt.colorbar()
+    plt.title("Kmeans "+str(n_clusters)+" clusters")
+    plt.show()
+    
+    return(0)
