@@ -13,6 +13,9 @@ import scipy.io.matlab as matlab
 import matplotlib.pyplot as plt
 from pylab import *
 
+
+from sklearn.metrics import silhouette_samples, silhouette_score
+
 def aviris_data_load():
         
     # Lectura de la imagen de fichero de Matlab .mat
@@ -43,15 +46,82 @@ def aviris_data_load():
     return([X,Y,Xl,Yl])
 
     
-def class_map(image):
-    n_clusters = np.max(image.reshape([145*145,1]))+1
+def class_map(X_,image):
+    cluster_labels = image.reshape([145*145])
+    n_clusters = np.max(cluster_labels)+1
     
+    #Parte donde se dibuja la imagen
     cmap = cm.get_cmap('tab20c', n_clusters) 
     
-    fig, ax = plt.subplots()
+    fig, (ax1,ax2) = plt.subplots(1,2)
     plt.imshow(image,cmap = cmap)
     plt.colorbar()
     plt.title("Kmeans "+str(n_clusters)+" clusters")
-    plt.show()
+    
+    #Galimatías donde se dibujan los silhouette
+    samples = silhouette_samples(X_,cluster_labels)
+    y_lower = 10
+    
+    silhouette_avg = silhouette_score(X_, cluster_labels)
+    for i in np.arange(0,n_clusters):
+        it_sample = samples[cluster_labels == i]
+        it_sample.sort()
+        
+        size_it_sample = it_sample.shape[0]
+        y_upper = y_lower + size_it_sample
+        
+        color = cm.nipy_spectral(float(i) / n_clusters)
+        ax1.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            it_sample,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,)
+    
+        ax1.text(-0.05, y_lower + 0.5 * size_it_sample, str(i))
+        
+        y_lower = y_upper+10
+    
+    ax1.set_title("The silhouette plot for the various clusters.")
+    ax1.set_xlabel("The silhouette coefficient values")
+    ax1.set_ylabel("Cluster label")
+    ax1.axvline(x=silhouette_avg, color="red", linestyle="--")   
+    ax1.set_yticks([])  # Clear the yaxis labels / ticks
+    ax1.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
     
     return(0)
+
+def draw_silhouette(X_,cluster_labels):
+    n_clusters = np.max(cluster_labels.reshape([145*145]))+1
+    samples = silhouette_samples(X_,cluster_labels)
+    y_lower = 10
+    
+    fig,ax=plt.subplots()
+    silhouette_avg = silhouette_score(X_, cluster_labels)
+    for i in np.arange(2,n_clusters):
+        it_sample = samples[cluster_labels == i]
+        it_sample.sort()
+        
+        size_it_sample = it_sample.shape[0]
+        y_upper = y_lower + size_it_sample
+        
+        color = cm.nipy_spectral(float(i) / n_clusters)
+        ax.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            it_sample,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,)
+    
+        ax.text(-0.05, y_lower + 0.5 * size_it_sample, str(i))
+        
+        y_lower = y_upper+10
+    
+    ax.set_title("The silhouette plot for the various clusters.")
+    ax.set_xlabel("The silhouette coefficient values")
+    ax.set_ylabel("Cluster label")
+    ax.axvline(x=silhouette_avg, color="red", linestyle="--")   
+    ax.set_yticks([])  # Clear the yaxis labels / ticks
+    ax.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])   
