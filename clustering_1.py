@@ -7,6 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.cluster import KMeans
+from sklearn.metrics import silhouette_samples, silhouette_score
 
 # X e Y son matrices, XL y Yl están vectorizadas y sin etiquetas 0
 X,Y,Xl,Yl = sp.aviris_data_load()
@@ -28,4 +29,13 @@ clstrs_Y = [pred.reshape([145,145,1]) for pred in clstrs_predictions]
 
 #class_map es una función en support functions que da una imagen 
 #del suelo donde aparece la clase ( o el cluster ) de cada pixel
-[sp.class_map(im) for im in clstrs_Y]
+#Obtenemos las gráficas de Shilouette
+
+#ALERTA !!!!!! si piensas que se te ha pillado el ordenador, tranquilo, este proceso es muy pesado
+[sp.class_map(X,im) for im in clstrs_Y]
+
+
+#Obtenemos las puntuaciones de Silhouette (Tarda un buen rato, aviso)
+clstrs_shilouette = [silhouette_score(X, pred.reshape([145*145]), metric='euclidean') for pred in clstrs_Y]
+#Obtenemos las gráficas de Shilouette
+[sp.draw_silhouette(X,pred.reshape([145*145])) for pred in clstrs_Y]
