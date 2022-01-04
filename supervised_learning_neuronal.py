@@ -9,9 +9,12 @@ Created on Tue Jan  4 17:50:43 2022
 import support_functions as sp
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans,SpectralClustering
 
+from sklearn.cluster import KMeans,SpectralClustering
+from sklearn.neural_network import MLPClassifier
 #carga de datos
+
+#%%
 X,Y,Xl,Yl = sp.aviris_data_load()
 
 n_tags = max(Yl)
