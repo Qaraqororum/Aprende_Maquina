@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 
 from sklearn.cluster import KMeans,SpectralClustering
 from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import silhouette_samples, silhouette_score, confusion_matrix , cohen_kappa_score, roc_curve, auc, roc_auc_score, RocCurveDisplay
+from sklearn import metrics
+
 #carga de datos
 
 #%%
@@ -45,3 +49,11 @@ X_reduced = np.concatenate(X_reduced)
 Y_reduced = np.concatenate(Y_reduced)
 
 #%% Uso de red neuronal para clasificar
+X_train, X_test, y_train, y_test = train_test_split(Xl, Yl, stratify=Yl,random_state=1)
+
+brain = MLPClassifier(random_state = 100,max_iter = 300).fit(X_train,y_train)
+pred = brain.predict_proba(X_test)
+
+pred_tag = [np.where(i == (np.max(i)))[0][0] for i in pred]
+conf_mat= metrics.confusion_matrix(y_test,pred_tag)
+kappa= metrics.cohen_kappa_score(y_test,pred_tag)
