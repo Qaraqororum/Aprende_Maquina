@@ -38,4 +38,4 @@ clstrs_Y = [pred.reshape([145,145,1]) for pred in clstrs_predictions]
 #Obtenemos las puntuaciones de Silhouette (Tarda un buen rato, aviso)
 clstrs_shilouette = [silhouette_score(X, pred.reshape([145*145]), metric='euclidean') for pred in clstrs_Y]
 #Obtenemos las gráficas de Shilouette
-[sp.draw_silhouette(X,pred.reshape([145*145])) for pred in clstrs_Y]
+#[sp.draw_silhouette(X,pred.reshape([145*145])) for pred in clstrs_Y]
