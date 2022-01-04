@@ -28,7 +28,8 @@ Y_reduced = []
 
 #Llenamos los libros reducidos
 for i in range(len(tag_list)):
-    data = X_index_sample[i][0,:,:]
+    data = X_index_sample[i][0,:,:] #Por cada bucle coge un subconjunto de etiqueta
+    #diferente
     n_points_reduced = int(np.ceil(data.shape[0]*ratio))
     cluster = KMeans(n_points_reduced).fit(data)
     newdata = cluster.cluster_centers_.squeeze()
@@ -38,3 +39,8 @@ for i in range(len(tag_list)):
 
 X_reduced = np.concatenate(X_reduced)
 Y_reduced = np.concatenate(Y_reduced)
+
+
+
+
+
