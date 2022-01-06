@@ -18,7 +18,7 @@ from sklearn import metrics
 
 #carga de datos
 
-#%%
+#%% Preparación de los datos
 X,Y,Xl,Yl = sp.aviris_data_load()
 
 n_tags = max(Yl)
@@ -52,8 +52,10 @@ Y_reduced = np.concatenate(Y_reduced)
 X_train, X_test, y_train, y_test = train_test_split(Xl, Yl, stratify=Yl,random_state=1)
 
 brain = MLPClassifier(random_state = 100,max_iter = 300).fit(X_train,y_train)
-pred = brain.predict_proba(X_test)
+pred = brain.predict(X_test)
+score = brain.predict_proba(X_train)
 
 pred_tag = [np.where(i == (np.max(i)))[0][0] for i in pred]
 conf_mat= metrics.confusion_matrix(y_test,pred_tag)
 kappa= metrics.cohen_kappa_score(y_test,pred_tag)
+sp.draw_ROC(y_train,score,tag_list)

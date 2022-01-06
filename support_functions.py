@@ -8,11 +8,12 @@ Created on Mon Dec 20 13:07:55 2021
 
 # coding: utf-8
 
+
 import numpy as np
 import scipy.io.matlab as matlab
 import matplotlib.pyplot as plt
 from pylab import *
-
+from sklearn import metrics
 
 from sklearn.metrics import silhouette_samples, silhouette_score
 
@@ -92,6 +93,23 @@ def class_map(X_,image):
     
     return(0)
 
+def draw_ROC(tags_true,scores,tag_list):
+    #Función que dibuja las curvas roc
+    #tags_true, el vector de clases verdaderas (y_train generalmente)
+    #scores, el vector o matriz con las puntuaciones del modelo entrenado (scores, predict_proba, ...)
+    #tag_list, la lista de etiquetas de las clases
+    fig, roc = plt.subplots()
+    for i in tag_list:
+        fpr, tpr, thres = metrics.roc_curve(tags_true, scores[:,i-1],pos_label=i)
+        roc.plot(fpr,tpr,"-",label = i)
+
+    
+    plt.title('Curvas ROC')
+    plt.ylabel('True positives')
+    plt.xlabel('False positives')
+    roc.legend(title = 'Clase',bbox_to_anchor=(1,1), loc="upper left")
+    plt.show()
+    return(0)
 def draw_silhouette(X_,cluster_labels):
     n_clusters = np.max(cluster_labels.reshape([145*145]))+1
     samples = silhouette_samples(X_,cluster_labels)
@@ -125,3 +143,4 @@ def draw_silhouette(X_,cluster_labels):
     ax.axvline(x=silhouette_avg, color="red", linestyle="--")   
     ax.set_yticks([])  # Clear the yaxis labels / ticks
     ax.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])   
+    return(0)
