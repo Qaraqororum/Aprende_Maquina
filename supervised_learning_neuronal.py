@@ -15,6 +15,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import silhouette_samples, silhouette_score, confusion_matrix , cohen_kappa_score, roc_curve, auc, roc_auc_score, RocCurveDisplay
 from sklearn import metrics
+from pylab import *
 
 #carga de datos
 
@@ -55,7 +56,18 @@ brain = MLPClassifier(random_state = 100,max_iter = 300).fit(X_train,y_train)
 pred = brain.predict(X_test)
 score = brain.predict_proba(X_train)
 
-pred_tag = [np.where(i == (np.max(i)))[0][0] for i in pred]
-conf_mat= metrics.confusion_matrix(y_test,pred_tag)
-kappa= metrics.cohen_kappa_score(y_test,pred_tag)
+
+conf_mat= metrics.confusion_matrix(y_test,pred)
+kappa= metrics.cohen_kappa_score(y_test,pred)
 sp.draw_ROC(y_train,score,tag_list)
+
+
+
+#%% Imagen cualitativa
+image = brain.predict(X.reshape([145*145,220])).reshape([145,145])
+cmap = cm.get_cmap('tab20c', 15) 
+
+fig, (ax1) = plt.subplots()
+plt.imshow(image,cmap = cmap)
+plt.colorbar()
+plt.title("Red neuronal "+str(16)+" clases")
