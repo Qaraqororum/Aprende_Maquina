@@ -47,7 +47,7 @@ def aviris_data_load():
     return([X,Y,Xl,Yl])
 
     
-def class_map(X_,image):
+def class_map(X_,image,tag = ["Kmeans",0,0],):
     cluster_labels = image.reshape([145*145])
     n_clusters = np.max(cluster_labels)+1
     
@@ -57,7 +57,10 @@ def class_map(X_,image):
     fig, (ax1,ax2) = plt.subplots(1,2)
     plt.imshow(image,cmap = cmap)
     plt.colorbar()
-    plt.title("Kmeans "+str(n_clusters)+" clusters")
+    if tag[0]=="Kmeans":
+        plt.title("Kmeans "+str(n_clusters)+" clusters")
+    else:
+        plt.title(tag[0]+" "+str(tag[1])+" e "+str(tag[2])+" n min")
     
     #Galimatías donde se dibujan los silhouette
     samples = silhouette_samples(X_,cluster_labels)
