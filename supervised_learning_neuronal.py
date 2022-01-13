@@ -41,8 +41,17 @@ for i in range(len(tag_list)):
     data = X_index_sample[i][0,:,:]
     n_points_reduced = int(np.ceil(data.shape[0]*ratio))
     cluster = KMeans(n_points_reduced).fit(data)
-    newdata = cluster.cluster_centers_.squeeze()
+    centers = cluster.cluster_centers_.squeeze()
     
+    newdata = list()
+    
+    #Seleccionamos el punto más cercano al centroide para evitar distorisionar la distribución de los puntos
+    for z in range(centers.shape[0]):
+        d = [np.linalg.norm(data[j,:]-centers[z,:]) for j in range(data.shape[0])]
+        indx = d.index(min(d))
+        newdata.append(data[indx])
+        
+        
     X_reduced.append(newdata)
     Y_reduced.append(np.ones(n_points_reduced)*tag_list[i])
 

@@ -48,7 +48,8 @@ def aviris_data_load():
 
     
 def class_map(X_,image,tag = ["Kmeans",0,0],):
-    cluster_labels = image.reshape([145*145])
+    a = image.shape
+    cluster_labels = image.reshape([a[0]*a[1]])
     n_clusters = np.max(cluster_labels)+1
     
     #Parte donde se dibuja la imagen
@@ -59,6 +60,10 @@ def class_map(X_,image,tag = ["Kmeans",0,0],):
     plt.colorbar()
     if tag[0]=="Kmeans":
         plt.title("Kmeans "+str(n_clusters)+" clusters")
+    elif tag[0]=="Jerárquico":
+        plt.title("Jerárquico "+str(n_clusters)+" clusters")
+    elif tag[0]=="Gaussianas":
+        plt.title("Gaussianas "+str(n_clusters)+" clusters tipo "+tag[2])
     else:
         plt.title(tag[0]+" "+str(tag[1])+" e "+str(tag[2])+" n min")
     
