@@ -6,6 +6,7 @@ import scipy.io.matlab as matlab
 import matplotlib.pyplot as plt
 
 
+
 # Lectura de la imagen de fichero de Matlab .mat
 mat_file =  "datasetB1.mat"
 mat = matlab.loadmat(mat_file,squeeze_me=True) #devuelve un dictionary
