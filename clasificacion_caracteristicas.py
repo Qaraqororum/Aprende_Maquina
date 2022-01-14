@@ -19,31 +19,7 @@ from sklearn.metrics import  confusion_matrix , cohen_kappa_score
 X,Y,Xl,Yl = sp.aviris_data_load()
 
 n_tags = max(Yl)
-ratio = 5000/Xl.shape[0]
-#separamos según etiqueta
-tag_list = np.arange(1,n_tags+1)#lista de etiquetas
-tag_index_list = [np.where(Yl == i) for i in tag_list]#lista con las posiciones de cada etiqueta
-Y_index_sample = [Yl[indx] for indx in tag_index_list]#subconjuntos de Yl y Xl de cada etiqueta
-X_index_sample= [Xl[indx,:] for indx in tag_index_list]
-
-
-#preparamos los vectores reducidos
-X_reduced = []
-Y_reduced = []
-
-#Llenamos los libros reducidos
-for i in range(len(tag_list)):
-    
-    data = X_index_sample[i][0,:,:]
-    n_points_reduced = int(np.ceil(data.shape[0]*ratio))
-    cluster = KMeans(n_points_reduced).fit(data)
-    newdata = cluster.cluster_centers_.squeeze()
-    
-    X_reduced.append(newdata)
-    Y_reduced.append(np.ones(n_points_reduced)*tag_list[i])
-
-X_reduced = np.concatenate(X_reduced)
-Y_reduced = np.concatenate(Y_reduced)
+X_reduced, Y_reduced = sp.data_reducer()
 
 #%% Entrenamiento del modelo para conseguir un ranking de características
 
@@ -94,6 +70,11 @@ Kappa_RF = report2(yts, yb)
 
 #Observamos como con el conjunto reducido de bandas, dejando solo 16 bandas, el ensemble funciona
 #bastante bien con un cohen-kappa de ~0.74
+tag_list = np.arange(1,17)
+score = rf.predict_proba(X_test)
+sp.draw_ROC(yts,score,tag_list)
 
+sp.draw_ConfusionM(Conf_matrix_RF,tag_list)
 
-
+X_ = np.delete(X.reshape([145*145,220]), indice, axis=1)
+sp.draw_image(rf.predict(X_),"Random Forest ")

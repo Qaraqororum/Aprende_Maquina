@@ -21,35 +21,8 @@ from sklearn.model_selection import GridSearchCV
 
 
 #%% Preparación de los datos
-X,Y,Xl,Yl = sp.aviris_data_load()
-
-n_tags = max(Yl)
-ratio = 5000/Xl.shape[0]
-#separamos según etiqueta
-tag_list = np.arange(1,n_tags+1)#lista de etiquetas
-tag_index_list = [np.where(Yl == i) for i in tag_list]#lista con las posiciones de cada etiqueta
-Y_index_sample = [Yl[indx] for indx in tag_index_list]#subconjuntos de Yl y Xl de cada etiqueta
-X_index_sample= [Xl[indx,:] for indx in tag_index_list]
-
-
-#preparamos los vectores reducidos
-X_reduced = []
-Y_reduced = []
-
-#Llenamos los libros reducidos
-for i in range(len(tag_list)):
-    
-    data = X_index_sample[i][0,:,:]
-    n_points_reduced = int(np.ceil(data.shape[0]*ratio))
-    cluster = KMeans(n_points_reduced).fit(data)
-    newdata = cluster.cluster_centers_.squeeze()
-    
-    X_reduced.append(newdata)
-    Y_reduced.append(np.ones(n_points_reduced)*tag_list[i])
-
-X_reduced = np.concatenate(X_reduced)
-Y_reduced = np.concatenate(Y_reduced)
-
+X_reduced, Y_reduced = sp.data_reducer()
+tag_list = np.arange(1,17)
 
 
 #%% 1 Sólo árbol
@@ -71,9 +44,13 @@ print('Confusion Matrix:  ', report(yts, ytree),'Cohen-kappa', report2(yts, ytre
 
 Conf_matrix_tree = report(yts, ytree)
 Kappa_tree = report2(yts, ytree)
+sp.draw_ROC(yts,tree.predict_proba(Xts),tag_list)
+sp.draw_ConfusionM(Conf_matrix_tree,tag_list)
 
 
-
+X,a,a,a = sp.aviris_data_load()
+image = tree.predict(X.reshape([145*145,220]))
+sp.draw_image(image,"Árbol de clasificación")
 #%% Plot and save confusion matrix
 metrics = [Conf_matrix_tree, Conf_matrix_RF]
 for i in metrics:

@@ -14,8 +14,10 @@ import scipy.io.matlab as matlab
 import matplotlib.pyplot as plt
 from pylab import *
 from sklearn import metrics
+import seaborn as sns
 
 from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.cluster import KMeans
 
 def aviris_data_load():
         
@@ -46,6 +48,46 @@ def aviris_data_load():
     
     return([X,Y,Xl,Yl])
 
+def data_reducer():
+    X,Y,Xl,Yl = aviris_data_load()
+
+    n_tags = max(Yl)
+    ratio = 5000/Xl.shape[0]
+    #separamos según etiqueta
+    tag_list = np.arange(1,n_tags+1)#lista de etiquetas
+    tag_index_list = [np.where(Yl == i) for i in tag_list]#lista con las posiciones de cada etiqueta
+    #subconjuntos de Yl y Xl de cada etiqueta
+    X_index_sample= [Xl[indx,:] for indx in tag_index_list]
+    
+    
+    #preparamos los vectores reducidos
+    X_reduced = []
+    Y_reduced = []
+    
+    #Llenamos los libros reducidos
+    for i in range(len(tag_list)):
+        
+        data = X_index_sample[i][0,:,:]
+        n_points_reduced = int(np.ceil(data.shape[0]*ratio))
+        cluster = KMeans(n_points_reduced).fit(data)
+        centers = cluster.cluster_centers_.squeeze()
+        
+        newdata = list()
+        
+        #Seleccionamos el punto más cercano al centroide para evitar distorisionar la distribución de los puntos
+        for z in range(centers.shape[0]):
+            d = [np.linalg.norm(data[j,:]-centers[z,:]) for j in range(data.shape[0])]
+            indx = d.index(min(d))
+            newdata.append(data[indx])
+            
+            
+        X_reduced.append(newdata)
+        Y_reduced.append(np.ones(n_points_reduced)*tag_list[i])
+    
+    X_reduced = np.concatenate(X_reduced)
+    Y_reduced = np.concatenate(Y_reduced)
+    
+    return((X_reduced,Y_reduced))
     
 def class_map(X_,image,tag = ["Kmeans",0,0],):
     a = image.shape
@@ -101,6 +143,23 @@ def class_map(X_,image,tag = ["Kmeans",0,0],):
     
     return(0)
 
+def draw_ConfusionM(matrix,tag_list):
+    
+    ax = sns.heatmap(matrix, annot=True, cmap='Blues')
+
+    ax.set_title('Confusion Matrix');
+    ax.set_xlabel('\nPredicted Values')
+    ax.set_ylabel('Actual Values ');
+    
+    ## Ticket labels - List must be in alphabetical order
+    ax.xaxis.set_ticklabels(tag_list)
+    ax.yaxis.set_ticklabels(tag_list)
+    
+    ## Display the visualization of the Confusion Matrix.
+    plt.show()
+    
+    
+    
 def draw_ROC(tags_true,scores,tag_list):
     #Función que dibuja las curvas roc
     #tags_true, el vector de clases verdaderas (y_train generalmente)
@@ -118,6 +177,7 @@ def draw_ROC(tags_true,scores,tag_list):
     roc.legend(title = 'Clase',bbox_to_anchor=(1,1), loc="upper left")
     plt.show()
     return(0)
+
 def draw_silhouette(X_,cluster_labels):
     n_clusters = np.max(cluster_labels.reshape([145*145]))+1
     samples = silhouette_samples(X_,cluster_labels)
@@ -152,3 +212,12 @@ def draw_silhouette(X_,cluster_labels):
     ax.set_yticks([])  # Clear the yaxis labels / ticks
     ax.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])   
     return(0)
+
+def draw_image(image,method):
+    n_clases = int(max(image))
+    cmap = cm.get_cmap('tab20c', n_clases) 
+    
+    fig, (ax1) = plt.subplots()
+    plt.imshow(image.reshape([145,145]),cmap = cmap)
+    plt.colorbar()
+    plt.title(method+" "+str(n_clases)+" clases")
