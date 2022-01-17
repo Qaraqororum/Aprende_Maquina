@@ -15,11 +15,9 @@ import matplotlib.pyplot as plt
 from pylab import *
 from sklearn import metrics
 import seaborn as sns
-import matplotlib as mpl
 
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.cluster import KMeans
-from skimage.transform import resize
 
 def aviris_data_load():
         
@@ -219,9 +217,123 @@ def draw_image(image,method):
     n_clases = int(max(image))
     cmap = cm.get_cmap('tab20c', n_clases) 
     
-    fig, (ax1) = plt.subplots()
+    fig, (ax1) = plt.subplots(figsize=(5,5))
     plt.imshow(image.reshape([145,145]),cmap = cmap)
     plt.colorbar()
     plt.title(method+" "+str(n_clases)+" clases")
-    default_dpi = mpl.rcParamsDefault['figure.dpi']
-    mpl.rcParams['figure.dpi'] = default_dpi*1.5
+
+def draw_silhouette(X_reshape,clstrs_Y_K9,clstrs_Y_G8,clstrs_Y_G18):
+    
+    sh = [0,0,0]
+    
+    fig, (sh1,sh2,sh3) = plt.subplots(1,3)
+
+    samples = silhouette_samples(X_reshape,clstrs_Y_K9)
+    y_lower = 10
+    n_clusters = 9
+    silhouette_avg = silhouette_score(X_reshape,clstrs_Y_K9)
+    sh[0] = silhouette_avg
+    
+    for i in np.arange(0,n_clusters):
+        it_sample = samples[clstrs_Y_K9 == i]
+        it_sample.sort()
+        
+        size_it_sample = it_sample.shape[0]
+        y_upper = y_lower + size_it_sample
+        
+        color = cm.nipy_spectral(float(i) / n_clusters)
+        sh1.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            it_sample,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,)
+    
+        sh1.text(-0.05, y_lower + 0.5 * size_it_sample, str(i))
+        
+        y_lower = y_upper+10
+    
+    sh1.set_title("KMeans")
+    #sh1.set_xlabel("The silhouette coefficient values")
+    sh1.set_ylabel("Cluster label")
+    sh1.axvline(x=silhouette_avg, color="red", linestyle="--")   
+    sh1.set_yticks([])  # Clear the yaxis labels / ticks
+    sh1.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
+    
+    samples = silhouette_samples(X_reshape,clstrs_Y_G8)
+    y_lower = 10
+    n_clusters = 8
+    silhouette_avg = silhouette_score(X_reshape,clstrs_Y_G8)
+    sh[1] = silhouette_avg
+    
+    for i in np.arange(0,n_clusters):
+        it_sample = samples[clstrs_Y_G8.reshape(145*145) == i]
+        it_sample.sort()
+        
+        size_it_sample = it_sample.shape[0]
+        y_upper = y_lower + size_it_sample
+        
+        color = cm.nipy_spectral(float(i) / n_clusters)
+        sh2.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            it_sample,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,)
+    
+        sh2.text(-0.05, y_lower + 0.5 * size_it_sample, str(i))
+        
+        y_lower = y_upper+10
+    
+    sh2.set_title("Gaussian Mixture")
+    sh2.set_xlabel("Silhouette coefficients")
+    sh2.set_ylabel("Cluster label")
+    sh2.axvline(x=silhouette_avg, color="red", linestyle="--")   
+    sh2.set_yticks([])  # Clear the yaxis labels / ticks
+    sh2.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
+    
+    n_clusters = 18
+    samples = silhouette_samples(X_reshape,clstrs_Y_G18)
+    y_lower = 10
+
+    silhouette_avg = silhouette_score(X_reshape,clstrs_Y_G18)
+    sh[2] = silhouette_avg
+    for i in np.arange(0,n_clusters):
+        it_sample = samples[clstrs_Y_G18 == i]
+        it_sample.sort()
+        
+        size_it_sample = it_sample.shape[0]
+        y_upper = y_lower + size_it_sample
+        
+        color = cm.nipy_spectral(float(i) / n_clusters)
+        sh3.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            it_sample,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,)
+    
+        sh3.text(-0.05, y_lower + 0.5 * size_it_sample, str(i))
+        
+        y_lower = y_upper+10
+    
+    sh3.set_title("Gaussian Mixture")
+    #sh3.set_xlabel("The silhouette coefficient values")
+    sh3.set_ylabel("Cluster label")
+    sh3.axvline(x=silhouette_avg, color="red", linestyle="--")   
+    sh3.set_yticks([])  # Clear the yaxis labels / ticks
+    sh3.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
+    
+    
+    objects = ('Kmeans 9',' Gaussian Mixture 8', 'Gaussian Mixture 18')
+    fig, (barsh) = subplots()
+    ypos = [1,2,3]
+    barsh.bar(ypos, sh, align='center', alpha=0.5)
+    plt.xticks(ypos, objects)
+    plt.ylabel('Silhouette')
+    plt.title('Coeficientes Silhouette medio')
+
+    plt.show()
