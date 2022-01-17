@@ -71,7 +71,7 @@ Kappa_RF = report2(yts, yb)
 #Observamos como con el conjunto reducido de bandas, dejando solo 16 bandas, el ensemble funciona
 #bastante bien con un cohen-kappa de ~0.74
 tag_list = np.arange(1,17)
-score = rf.predict_proba(X_test)
+score = rf.predict_proba(Xts)
 sp.draw_ROC(yts,score,tag_list)
 
 sp.draw_ConfusionM(Conf_matrix_RF,tag_list)
