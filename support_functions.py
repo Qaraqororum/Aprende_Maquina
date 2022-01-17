@@ -15,9 +15,11 @@ import matplotlib.pyplot as plt
 from pylab import *
 from sklearn import metrics
 import seaborn as sns
+import matplotlib as mpl
 
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.cluster import KMeans
+from skimage.transform import resize
 
 def aviris_data_load():
         
@@ -221,3 +223,5 @@ def draw_image(image,method):
     plt.imshow(image.reshape([145,145]),cmap = cmap)
     plt.colorbar()
     plt.title(method+" "+str(n_clases)+" clases")
+    default_dpi = mpl.rcParamsDefault['figure.dpi']
+    mpl.rcParams['figure.dpi'] = default_dpi*1.5
