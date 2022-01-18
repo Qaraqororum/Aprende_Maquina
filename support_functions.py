@@ -222,7 +222,7 @@ def draw_image(image,method):
     plt.colorbar()
     plt.title(method+" "+str(n_clases)+" clases")
 
-def draw_silhouette(X_reshape,clstrs_Y_K9,clstrs_Y_G8,clstrs_Y_G18):
+def draw_silhouette_plus(X_reshape,clstrs_Y_K9,clstrs_Y_G8,clstrs_Y_G18):
     
     sh = [0,0,0]
     
