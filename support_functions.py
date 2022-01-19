@@ -221,6 +221,12 @@ def draw_image(image,method):
     plt.imshow(image.reshape([145,145]),cmap = cmap)
     plt.colorbar()
     plt.title(method+" "+str(n_clases)+" clases")
+    ax = plt.gca()
+
+    #hide x-axis
+    plt.gca().get_xaxis().set_visible(False)
+    plt.gca().get_yaxis().set_visible(False)
+    #hide y-axis
 
 def draw_silhouette_plus(X_reshape,clstrs_Y_K9,clstrs_Y_G8,clstrs_Y_G18):
     
