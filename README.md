@@ -1,7 +1,7 @@
 # Ejercicio B1
 Miguel Hortelano Busto y Francisco Olayo González Rodríguez 
 
-Como para estos clústerings resultantes, al no tener un conjunto de etiquetas verdaderas "Ground Truth", utilizamos métricas que no necesiten de ella. En nuestro caso optaremos por los coeficientes de siluteta (silhouette). También es oportuno
+En este ejercicio contamos con una imagen del sensor AVIRIS de 145*145 píxeles de tamaño y 220 bandas. El objetivo es experimentar con diferentes métodos de clasificación y aprendizaje máquina sin realizar reducción de dimensionalidad (a menos que se indique).
 
 Carga de paquetes a utilizar en el entregable.
 
