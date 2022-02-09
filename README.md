@@ -92,7 +92,7 @@ sp.draw_silhouette_plus(X_reshape,clstrs_Y_K9,clstrs_Y_G8,clstrs_Y_G18)#función
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_6_4.png)
+![png](Entregable_final_ML_files/i4.png)
     
 
 
@@ -199,19 +199,19 @@ sp.draw_image(image,"Árbol de clasificación")
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_13_1.png)
+![png](Entregable_final_ML_files/i5.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_13_2.png)
+![png](Entregable_final_ML_files/i6.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_13_3.png)
+![png](Entregable_final_ML_files/i7.png)
     
 
 
@@ -265,7 +265,7 @@ plt.legend()
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_16_1.png)
+![png](Entregable_final_ML_files/i8.png)
     
 
 
@@ -305,19 +305,19 @@ sp.draw_image(image,"12NN")
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_18_1.png)
+![png](Entregable_final_ML_files/i9.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_18_2.png)
+![png](Entregable_final_ML_files/i10.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_18_3.png)
+![png](Entregable_final_ML_files/i11.png)
     
 
 
@@ -356,7 +356,7 @@ X_2 = np.delete(X.reshape([145*145,220]), indice, axis=1)
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_20_0.png)
+![png](Entregable_final_ML_files/i12.png)
     
 
 
@@ -399,19 +399,19 @@ sp.draw_image(image,"Árbol de clasificación")
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_22_1.png)
+![png](Entregable_final_ML_files/i13.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_22_2.png)
+![png](Entregable_final_ML_files/i14.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_22_3.png)
+![png](Entregable_final_ML_files/i15.png)
     
 
 
@@ -458,19 +458,19 @@ sp.draw_image(rf.predict(X_2),"Random Forest ")
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_25_1.png)
+![png](Entregable_final_ML_files/16.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_25_2.png)
+![png](Entregable_final_ML_files/i17.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_25_3.png)
+![png](Entregable_final_ML_files/i18.png)
     
 
 
@@ -509,18 +509,18 @@ sp.draw_image(rf.predict(X_2),"Ada Boost ")
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_27_1.png)
+![png](Entregable_final_ML_files/i19.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_27_2.png)
+![png](Entregable_final_ML_files/i20.png)
     
 
 
 
     
-![png](Entregable_final_ML_files/Entregable_final_ML_27_3.png)
+![png](Entregable_final_ML_files/i21.png)
     
 
